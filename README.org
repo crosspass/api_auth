@@ -1,0 +1,77 @@
+* thinkings
+** authenticate
+how administrator authenticate?
+*** client
+http request headers[api-token] = token
+*** server
+client = Client.find_by token
+http.path in? client.apis
+
+extra authenticate method for api controller
+
+#+SRC_BEGIN ruby
+ class  ApiController < Action::Base
+   include Api::Auth
+ end
+
+ module Api::Auth
+   extends ActiveSupport::Concern
+   included do
+     before_action :authenticate
+   end
+   
+   def authenticate
+     client = Client.find_by token
+     api = client.apis.find http.path
+     api_request = ApiRequest.find(client: cleint, api: api)
+     if api_request
+       api_request.update_column(api_request.amount + 1)
+     else
+       api_request = ApiRequest.create(client: cleint, api: api, amount: 1)
+     end
+   end
+ end
+#+SRC_END
+
+administrator page
+
+bootstrap 4
+
+clients, apis, api_request pages
+
+** models
+| clients   | desc        |
+|-----------+-------------|
+| id        |             |
+| name      |             |
+| developer |             |
+| token     |             |
+| forbidden |             |
+| desc      | client info |
+
+
+| apis | desc            |
+|------+-----------------|
+| path | /api/businesses |
+
+** analytics
+client path every day request amount
+
+| requests     |
+|--------------|
+| client_id    |
+| api_id       |
+| amount       |
+| date         |
+
+index on date
+
+* solve
+
+rails enginee
+
+
+
+
+
+

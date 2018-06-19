@@ -1,4 +1,4 @@
-require 'test_helper'
+Require 'test_helper'
 
 class ApiAuth::Test < ActiveSupport::TestCase
   test "truth" do
