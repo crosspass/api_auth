@@ -6,39 +6,14 @@
 </p>
 
 <p>
-  <strong>Developer:</strong>
-  <%= @client.developer %>
-</p>
-
-<p>
-  <strong>Token:</strong>
-  <%= @client.token %>
-</p>
-
-<p>
-  <strong>Forbidden:</strong>
-  <%= @client.forbidden %>
+  <strong>Email:</strong>
+  <%= @client.email %>
 </p>
 
 <p>
   <strong>Desc:</strong>
   <%= @client.desc %>
 </p>
-
-<ul id="client_list">
-  <% ApiAuth::Api.all.each do |api| %>
-    <li>
-      <input
-        class="form-check-input"
-        type="checkbox"
-        name="apis[]"
-        value="<%= toggle_api_client_path(@client, {api_id: api.id}) %>"
-        <%= 'checked' if @client.apis.include?(api) %>
-      />
-      <label><%= api.path %></label>
-    </li>
-  <% end %>
-</ul>
 
 <%= link_to 'Edit', edit_client_path(@client) %> |
 <%= link_to 'Back', clients_path %>

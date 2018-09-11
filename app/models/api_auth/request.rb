@@ -1,6 +1,5 @@
 module ApiAuth
   class Request < ApplicationRecord
-    belongs_to :client
-    belongs_to :api
+    belongs_to :authorized_api
   end
 end

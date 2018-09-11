@@ -6,7 +6,11 @@
   <thead>
     <tr>
       <th><%= ApiAuth::Api.human_attribute_name(:path) %></th>
-      <th colspan="3"></th>
+      <th>GET</th>
+      <th>POST</th>
+      <th>PUT</th>
+      <th>DELETE</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -14,9 +18,15 @@
     <% @apis.each do |api| %>
       <tr>
         <td><%= api.path %></td>
-        <td><%= link_to 'Show', api %></td>
-        <td><%= link_to 'Edit', edit_api_path(api) %></td>
-        <td><%= link_to 'Destroy', api, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= api.GET %></td>
+        <td><%= api.POST %></td>
+        <td><%= api.PUT %></td>
+        <td><%= api.DELETE %></td>
+        <td>
+          <%= link_to 'Show', api %>
+          <%= link_to 'Edit', edit_api_path(api) %>
+          <%= link_to 'Destroy', api, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -43,7 +53,6 @@
             </label>
             <%= f.text_field :path, class: 'form-control' %>
           </div>
-          <%= f.submit class: 'btn btn-primary' %>
         <% end %>
       </div>
     </div>

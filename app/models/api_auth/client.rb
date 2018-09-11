@@ -1,20 +1,12 @@
-class ApiAuth::Client < ApplicationRecord
-  has_secure_token :token
-  has_and_belongs_to_many :apis
-  has_many :requests
+# frozen_string_literal: true
 
-  validates :name, uniqueness: true, presence: true
-  validates :developer, presence: true
-
-  #before_create :set_token
-
-  private
-
-  def set_token
-    self.token = generate_token
-  end
-
-  def generate_token
-    'a' * 32
+module ApiAuth
+  ##
+  # Third apart information
+  # Third aprt apply api by email
+  # developers or operators manage clients information
+  class Client < ApplicationRecord
+    validates_presence_of :name, :email, :desc
+    has_secure_token
   end
 end

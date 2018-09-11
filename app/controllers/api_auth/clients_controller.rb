@@ -2,7 +2,7 @@ require_dependency "api_auth/application_controller"
 
 module ApiAuth
   class ClientsController < ApplicationController
-    before_action :set_client, only: [:show, :edit, :update, :destroy, :toggle_api]
+    before_action :set_client, only: [:show, :edit, :update, :destroy]
 
     # GET /clients
     def index
@@ -48,17 +48,6 @@ module ApiAuth
       redirect_to clients_url, notice: 'Client was successfully destroyed.'
     end
 
-    # GET /clients/1/toggle_api
-    # Add or remove api of client's apis
-    def toggle_api
-      api = Api.find(params[:api_id])
-      if @client.apis.include?(api)
-        @client.apis.delete(api)
-      else
-        @client.apis << api
-      end
-    end
-
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_client
@@ -67,7 +56,7 @@ module ApiAuth
 
       # Only allow a trusted parameter "white list" through.
       def client_params
-        params.require(:client).permit(:name, :developer, :token, :forbidden, :desc)
+        params.require(:client).permit(:name, :email, :desc)
       end
   end
 end

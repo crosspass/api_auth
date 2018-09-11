@@ -14,13 +14,10 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-APP_RAKEFILE = File.expand_path("../test/dummy/Rakefile", __FILE__)
+APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
 load 'rails/tasks/engine.rake'
 
-
 load 'rails/tasks/statistics.rake'
-
-
 
 require 'bundler/gem_tasks'
 
@@ -32,5 +29,7 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
+require 'rspec/core'
+require 'rspec/core/rake_task'
 
-task default: :test
+task :default => :spec

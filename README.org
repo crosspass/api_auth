@@ -70,8 +70,56 @@ index on date
 
 rails enginee
 
+* api auth
+
+before_action :api_auth
+
+provide current_client helper method
+
+way1
+
+header with secret key ?
+ request     api_auth(authenticate secret key)
+---------->--------------------------------->
+
+way2?
+
+client                           server
+
+| post /api/token                    |
+| ---------------------------------> |
+|                                    |
+|                                    |
+| token in expires x hours           |
+| <--------------------------------  |
+|                                    |
+|  api with header token             |
+| ---------------------------------> |
+|                                    |
+
+def api_auth
+  @current_client = Secret.find(key: secret).client
+end
+
+def current_client
+  @current_client
+end
+
+** models
+
+client
+
+| name   | email  | desc    | token  |
+| string | string | context | string |
 
 
+uri
+| path   | client_id | methodss         |
+| string |           | GET/POST/DEL/PUT |
 
 
+** statistics
 
+data store in redis
+
+monthly data

@@ -4,9 +4,9 @@
       <h2><%= pluralize(client.errors.count, "error") %> prohibited this client from being saved:</h2>
 
       <ul>
-      <% client.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% client.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
@@ -17,24 +17,49 @@
   </div>
 
   <div class="field">
-    <%= form.label :developer %>
-    <%= form.text_field :developer, id: :client_developer %>
-  </div>
-
-  <div class="field">
-    <%= form.label :token %>
-    <%= form.text_field :token, id: :client_token %>
-  </div>
-
-  <div class="field">
-    <%= form.label :forbidden %>
-    <%= form.check_box :forbidden, id: :client_forbidden %>
+    <%= form.label :email %>
+    <%= form.text_field :email, id: :client_email %>
   </div>
 
   <div class="field">
     <%= form.label :desc %>
     <%= form.text_area :desc, id: :client_desc %>
   </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>URL</th>
+        <th>GET</th>
+        <th>POST</th>
+        <th>PUT</th>
+        <th>DELETE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ApiAuth::Api.all.each do |api| %>
+        <tr>
+          <td>
+            <%= api.path %>
+            <%= hidden_field_tag 'apis[][api_id]', api.id  %>
+          </td>
+          <td>
+            <%= check_box_tag 'apis[][GET]', 'yes', false, class: 'form-control' %>
+          </td>
+          <td>
+            <%= check_box_tag 'apis[][POST]', 'yes', false, class: 'form-control' %>
+          </td>
+          <td>
+            <%= check_box_tag 'apis[][PUT]', 'yes', false, class: 'form-control' %>
+          </td>
+          <td>
+            <%= check_box_tag 'apis[][DELETE]', 'yes', false, class: 'form-control' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
 
   <div class="actions">
     <%= form.submit %>
