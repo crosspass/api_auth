@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_dependency "api_auth/application_controller"
 
 module ApiAuth
@@ -25,8 +27,10 @@ module ApiAuth
     # POST /clients
     def create
       @client = Client.new(client_params)
-
       if @client.save
+        apis_params['apis'].each do |api|
+          @client.authorized_apis.create(api)
+        end
         redirect_to @client, notice: 'Client was successfully created.'
       else
         render :new
@@ -49,14 +53,18 @@ module ApiAuth
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_client
-        @client = Client.find(params[:id])
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_client
+      @client = Client.find(params[:id])
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def client_params
-        params.require(:client).permit(:name, :email, :desc)
-      end
+    # Only allow a trusted parameter "white list" through.
+    def client_params
+      params.require(:client).permit(:name, :email, :desc)
+    end
+
+    def apis_params
+      params.permit(apis: %i[api_id GET PUT DELETE POST])
+    end
   end
 end

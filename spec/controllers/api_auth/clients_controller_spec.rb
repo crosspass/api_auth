@@ -30,7 +30,8 @@ module ApiAuth
     # This should return the minimal set of attributes required to create a valid
     # Client. As you add validations to Client, be sure to
     # adjust the attributes here as well.
-    let(:valid_attributes) {
+    let(:valid_attributes) do
+      api = create(:api)
       {
         client: {
           name: 'test',
@@ -38,11 +39,17 @@ module ApiAuth
           desc: 'test ha!'
         },
         apis: [
-          { id: 1 },
-          { GET: true }
+          {
+            api_id: api.id,
+            GET: true
+          },
+          {
+            api_id: api.id,
+            POST: true
+          }
         ]
       }
-    }
+    end
 
     let(:invalid_attributes) {
       {
@@ -55,61 +62,62 @@ module ApiAuth
     # ClientsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
 
-    describe "GET #index" do
-      it "returns a success response" do
+    describe 'GET #index' do
+      it 'returns a success response' do
         create(:client)
         get :index, params: {}, session: valid_session
         expect(response).to be_successful
       end
     end
 
-    describe "GET #show" do
-      it "returns a success response" do
+    describe 'GET #show' do
+      it 'returns a success response' do
         client = create(:client)
         get :show, params: {id: client.to_param}, session: valid_session
         expect(response).to be_successful
       end
     end
 
-    describe "GET #new" do
-      it "returns a success response" do
+    describe 'GET #new' do
+      it 'returns a success response' do
         get :new, params: {}, session: valid_session
         expect(response).to be_successful
       end
     end
 
-    describe "GET #edit" do
-      it "returns a success response" do
+    describe 'GET #edit' do
+      it 'returns a success response' do
         client = create(:client)
         get :edit, params: {id: client.to_param}, session: valid_session
         expect(response).to be_successful
       end
     end
 
-    describe "POST #create" do
-      context "with valid params" do
-        it "creates a new Client" do
+    describe 'POST #create' do
+      context 'with valid params' do
+        it 'creates a new Client' do
           expect {
             post :create, params: valid_attributes, session: valid_session
           }.to change(Client, :count).by(1)
+          expect(ApiAuth::Client.last.authorized_apis.count).to eq(2)
         end
 
-        it "redirects to the created client" do
+        it 'redirects to the created client' do
           post :create, params: valid_attributes, session: valid_session
           expect(response).to redirect_to(Client.last)
         end
       end
 
-      context "with invalid params" do
-        it "returns a success response (i.e. to display the 'new' template)" do
+      context 'with invalid params' do
+        it 'returns a success response (i.e. to display the "new" template)' do
           post :create, params: {client: invalid_attributes}, session: valid_session
           expect(response).to be_successful
         end
       end
     end
 
-    describe "PUT #update" do
-      context "with valid params" do
+    describe 'PUT #update' do
+      context 'with valid params' do
         let(:new_attributes) {
           {
             name: 'test2',
@@ -118,21 +126,21 @@ module ApiAuth
           }
         }
 
-        it "updates the requested client" do
+        it 'updates the requested client' do
           client = create(:client)
           put :update, params: {id: client.to_param, client: new_attributes}, session: valid_session
           client.reload
         end
 
-        it "redirects to the client" do
+        it 'redirects to the client' do
           client = create(:client)
           put :update, params: {id: client.to_param, client: new_attributes}, session: valid_session
           expect(response).to redirect_to(client)
         end
       end
 
-      context "with invalid params" do
-        it "returns a success response (i.e. to display the 'edit' template)" do
+      context 'with invalid params' do
+        it 'returns a success response (i.e. to display the "edit" template)' do
           client = create(:client)
           put :update, params: { id: client.to_param, client: invalid_attributes}, session: valid_session
           expect(response.successful?).to eq(false)
@@ -140,15 +148,15 @@ module ApiAuth
       end
     end
 
-    describe "DELETE #destroy" do
-      it "destroys the requested client" do
+    describe 'DELETE #destroy' do
+      it 'destroys the requested client' do
         client = create(:client)
         expect {
           delete :destroy, params: {id: client.to_param}, session: valid_session
         }.to change(Client, :count).by(-1)
       end
 
-      it "redirects to the clients list" do
+      it 'redirects to the clients list' do
         client = create(:client)
         delete :destroy, params: {id: client.to_param}, session: valid_session
         expect(response).to redirect_to(clients_url)

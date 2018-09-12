@@ -7,6 +7,7 @@ module ApiAuth
   # developers or operators manage clients information
   class Client < ApplicationRecord
     validates_presence_of :name, :email, :desc
+    has_many :authorized_apis
     has_secure_token
   end
 end
