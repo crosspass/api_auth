@@ -21,6 +21,10 @@ Or install it yourself as:
 $ gem install api_auth
 ```
 
+## TODO
+
+Configure resources reoute
+
 ## Contributing
 Contribution directions go here.
 

@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 require 'active_support/concern'
-require_relative './api_forbidden_error'
+require_relative './errors'
 
 module ApiAuth
   ##
   # Authenticate http request
   # request header contain `api-token`
   module Auth
-
     extend ActiveSupport::Concern
+    include ActionController::HttpAuthentication::Token::ControllerMethods
 
     included do
       before_action :authenticate
-      rescue_from ApiAuth::ApiForbiddenError, with: :render_403
+      rescue_from ApiAuth::Errors::ApiForbiddenError, with: :render_403
+      rescue_from ApiAuth::Errors::UnAuthenticateError, with: :render_401
     end
-
 
     protected
 
@@ -24,31 +24,36 @@ module ApiAuth
     end
 
     def authenticate
-      @client = ApiAuth::Client.find_by(token: header_token)
-      if @client
-        raise not_allowd_error unless client.apis.include?(request.path)
-      else
-        raise client_not_found_error
+      authenticate_or_request_with_http_token do |token, _|
+        @client = ApiAuth::Client.find_by(token: token)
+        raise unauthenticated_error unless @client
+        raise client_disabled_error if @client.disabled?
+        raise unauthorized_error if @client && !@client.allow_request?(request)
+        true
       end
-      true
-    end
-
-    def header_token
-      request.headers['api-token']
     end
 
     private
 
-    def not_allowed_error
-      ApiAuth::ApiForbiddenError.new("#{request.path} is not allowed!")
+    def unauthorized_error
+      ApiAuth::Errors::ApiForbiddenError.new("#{request.path} is not allowed!")
     end
 
-    def client_not_found_error
-      ApiAuth::ApiForbiddenError.new("#{header_token} is not found!")
+    def unauthenticated_error
+      ApiAuth::Errors::UnAuthenticateError.new('token is invalid!')
     end
 
-    def render_403(e)
-      render json: { message: "#{e.message}"}, status: 403
+    def client_disabled_error
+      ApiAuth::Errors::ApiForbiddenError.new('client is disabled!')
+    end
+
+
+    def render_403(error)
+      render json: { message: error.message }, status: 403
+    end
+
+    def render_401(error)
+      render json: { message: error.message }, status: 401
     end
   end
 end

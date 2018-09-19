@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180907034238) do
+ActiveRecord::Schema.define(version: 20180918092603) do
 
   create_table "api_auth_apis", force: :cascade do |t|
     t.string "path"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20180907034238) do
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0
   end
 
   create_table "api_auth_requests", force: :cascade do |t|
