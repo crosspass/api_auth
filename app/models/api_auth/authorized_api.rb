@@ -5,9 +5,11 @@ module ApiAuth
   # client's authorized apis
   class AuthorizedApi < ApplicationRecord
     has_many :requests
+    validates_presence_of :api, :client
+    validates :api, uniqueness: { scope: :client_id }
+
     belongs_to :client
     belongs_to :api
-    validates_presence_of :api, :client
     delegate :path, to: :api
 
     ##

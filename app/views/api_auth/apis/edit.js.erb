@@ -1,0 +1,7 @@
+if($('#edit_api').length == 0) {
+  $('body').append("<%= j(render('modal', api: @api)) %>");
+} else {
+  $('#edit_api').replaceWith("<%= j(render('modal', api: @api)) %>");
+}
+$('#edit_api').modal('show');
+

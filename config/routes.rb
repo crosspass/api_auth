@@ -3,7 +3,10 @@ ApiAuth::Engine.routes.draw do
   resources :requests
   resources :apis
   resources :clients do
-    get :toggle_api, on: :member
+    member do
+      get :apis
+      put :toggle_api
+    end
   end
 
   root to: 'clients#index'

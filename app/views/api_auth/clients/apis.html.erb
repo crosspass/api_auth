@@ -1,0 +1,66 @@
+<%= hidden_field_tag 'client_id', @client.id %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>GET</th>
+      <th>POST</th>
+      <th>PUT</th>
+      <th>DELETE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% ApiAuth::Api.all.each do |api| %>
+      <% authorized_api = @client.authorized_apis.find_by(api_id: api.id) %>
+      <tr>
+        <td>
+          <%= api.path %>
+          <%= hidden_field_tag 'api_id', api.id %>
+        </td>
+        <td>
+          <div class="form-check">
+            <%= check_box_tag 'GET', 'true', authorized_api.try(:GET), class: 'form-check-input toggle_api', disabled: !api.GET %>
+          </div>
+        </td>
+        <td>
+          <div class="form-check">
+            <%= check_box_tag 'POST', 'true', authorized_api.try(:POST), class: 'form-check-input toggle_api', disabled: !api.POST %>
+          </div>
+        </td>
+        <td>
+          <div class="form-check">
+            <%= check_box_tag 'PUT', 'true', authorized_api.try(:PUT), class: 'form-check-input toggle_api', disabled: !api.PUT %>
+          </div>
+        </td>
+        <td>
+          <div class="form-check">
+            <%= check_box_tag 'DELETE', 'true', authorized_api.try(:DELETE), class: 'form-check-input toggle_api', disabled: !api.DELETE %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="actions">
+  <%= link_to '返回', clients_path, class: 'btn btn-defaultn' %>
+</div>
+
+<script>
+ $('.toggle_api').click(function(e){
+   console.log('test');
+   var api_id = e.target.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.value;
+   var params = {
+     api: {
+       id: api_id
+     }
+   };
+   params['api'][e.target.name] = e.target.checked;
+   var client_id = $('#client_id').val();
+   var path = '/api_auth/clients/' + client_id + '/toggle_api';
+   $.ajax(path, {
+     method: 'PUT',
+     data: params,
+     dataType: 'json'
+   })
+ })
+</script>

@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180918092603) do
+ActiveRecord::Schema.define(version: 20180919072603) do
 
   create_table "api_auth_apis", force: :cascade do |t|
     t.string "path"
+    t.boolean "GET", default: false
+    t.boolean "POST", default: false
+    t.boolean "PUT", default: false
+    t.boolean "DELETE", default: false
   end
 
   create_table "api_auth_authorized_apis", force: :cascade do |t|

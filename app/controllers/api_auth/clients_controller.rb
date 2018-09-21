@@ -4,7 +4,7 @@ require_dependency "api_auth/application_controller"
 
 module ApiAuth
   class ClientsController < ApplicationController
-    before_action :set_client, only: [:show, :edit, :update, :destroy]
+    before_action :set_client, only: [:show, :edit, :update, :destroy, :apis, :toggle_api]
 
     # GET /clients
     def index
@@ -24,13 +24,24 @@ module ApiAuth
     def edit
     end
 
+    # GET /clients/1/apis
+    def apis
+    end
+
+    # PUT /clients/1/toggle_api
+    def toggle_api
+      api = Api.find(params[:api][:id])
+      if api
+        @client.toggle_api(api, api_params.require('api'))
+      else
+        render json: { message: 'api not found!' }, status: 422
+      end
+    end
+
     # POST /clients
     def create
       @client = Client.new(client_params)
       if @client.save
-        apis_params['apis'].each do |api|
-          @client.authorized_apis.create(api)
-        end
         redirect_to @client, notice: 'Client was successfully created.'
       else
         render :new
@@ -63,8 +74,8 @@ module ApiAuth
       params.require(:client).permit(:name, :email, :desc)
     end
 
-    def apis_params
-      params.permit(apis: %i[api_id GET PUT DELETE POST])
+    def api_params
+      params.permit(api: %i[id GET PUT DELETE POST])
     end
   end
 end

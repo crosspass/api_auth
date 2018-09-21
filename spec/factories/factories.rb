@@ -3,12 +3,17 @@
 FactoryBot.define do
   factory :api, class: ApiAuth::Api do
     path { '/api/users' }
+    GET { true }
+    PUT { true }
+    POST { true }
+    DELETE { true }
   end
 
   factory :client, class: ApiAuth::Client do
     name { 't' }
     email { 't@t.com' }
     desc { 't' }
+
     factory :client_with_authorized_apis do
       transient do
         apis_count { 1 }

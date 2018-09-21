@@ -11,57 +11,23 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :name %>
-    <%= form.text_field :name, id: :client_name %>
+    <%= form.text_field :name, id: :client_name, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :email %>
-    <%= form.text_field :email, id: :client_email %>
+    <%= form.text_field :email, id: :client_email, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :desc %>
-    <%= form.text_area :desc, id: :client_desc %>
+    <%= form.text_area :desc, id: :client_desc, class: 'form-control' %>
   </div>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>URL</th>
-        <th>GET</th>
-        <th>POST</th>
-        <th>PUT</th>
-        <th>DELETE</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% ApiAuth::Api.all.each do |api| %>
-        <tr>
-          <td>
-            <%= api.path %>
-            <%= hidden_field_tag 'apis[][api_id]', api.id  %>
-          </td>
-          <td>
-            <%= check_box_tag 'apis[][GET]', 'yes', false, class: 'form-control' %>
-          </td>
-          <td>
-            <%= check_box_tag 'apis[][POST]', 'yes', false, class: 'form-control' %>
-          </td>
-          <td>
-            <%= check_box_tag 'apis[][PUT]', 'yes', false, class: 'form-control' %>
-          </td>
-          <td>
-            <%= check_box_tag 'apis[][DELETE]', 'yes', false, class: 'form-control' %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-
-  </table>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: 'btn btn-primary' %>
+    <%= link_to '返回', clients_path, class: 'btn btn-defaultn' %>
   </div>
 <% end %>

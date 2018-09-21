@@ -23,9 +23,8 @@
         <td><%= api.PUT %></td>
         <td><%= api.DELETE %></td>
         <td>
-          <%= link_to 'Show', api %>
-          <%= link_to 'Edit', edit_api_path(api) %>
-          <%= link_to 'Destroy', api, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to '编辑', edit_api_path(api), remote: true %>
+          <%= link_to '删除', api, method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>
@@ -36,25 +35,4 @@
 
 <%= link_to "#{t('raw.create')}#{ApiAuth::Api.model_name.human}", '#new_api', class: 'btn btn-primary', data: {toggle: 'modal', target: '#new_api'} %>
 
-<div class="modal" id="new_api" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><%= t('raw.create') %><%= ApiAuth::Api.model_name.human %></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <%= form_for ApiAuth::Api.new do |f| %>
-          <div class="form-group">
-            <label class="form-label">
-              <%= ApiAuth::Api.human_attribute_name('path') %>
-            </label>
-            <%= f.text_field :path, class: 'form-control' %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render 'api_auth/apis/modal', api: ApiAuth::Api.new %>

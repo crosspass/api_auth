@@ -1,0 +1,45 @@
+<div class="modal" id="<%= api.new_record? ? 'new_api' : 'edit_api' %>" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          <%= api.new_record? ? t('raw.create') : t('raw.edit') %><%= ApiAuth::Api.model_name.human %>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= form_for api do |f| %>
+          <div class="form-group">
+            <label class="form-label">
+              <%= ApiAuth::Api.human_attribute_name('path') %>
+            </label>
+            <%= f.text_field :path, class: 'form-control' %>
+          </div>
+          <fieldset>
+            <div class="form-group">
+              <div class="form-check form-check-inline">
+                <%= f.check_box :GET, class: 'form-check-input' %>
+                <label class="form-check-label">GET</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <%= f.check_box :POST, class: 'form-check-input' %>
+                <label class="form-check-label">POST</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <%= f.check_box :PUT, class: 'form-check-input' %>
+                <label class="form-check-label">PUT</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <%= f.check_box :DELETE, class: 'form-check-input' %>
+                <label class="form-check-label">DELETE</label>
+              </div>
+            </div>
+          </fieldset>
+          <%= f.button class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

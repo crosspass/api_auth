@@ -36,7 +36,7 @@ module ApiAuth
     # PATCH/PUT /apis/1
     def update
       if @api.update(api_params)
-        redirect_to @api, notice: 'Api was successfully updated.'
+        redirect_to apis_url, notice: 'Api was successfully updated.'
       else
         render :edit
       end
@@ -56,7 +56,7 @@ module ApiAuth
 
       # Only allow a trusted parameter "white list" through.
       def api_params
-        params.require(:api).permit(:path)
+        params.require(:api).permit(:path, :GET, :POST, :PUT, :DELETE)
       end
   end
 end
